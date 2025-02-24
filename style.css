@@ -5,9 +5,9 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #87CEEB;
-    overflow: hidden;
+    font-family: Arial;
+    background-color: #ffffff;
+    overflow: center;
 }
 
 #game {
@@ -18,6 +18,9 @@ body {
     background-color: #f0f0f0;
     border: 2px solid #000;
     overflow: hidden;
+    background-image: url('https://unecon.ru/wp-content/uploads/2023/05/3-3.jpg'); /* Добавь изображение фона */
+    background-repeat: repeat-x; /* Фон повторяется по горизонтали */
+    background-position: 0 0;
 }
 
 #cat {
@@ -28,7 +31,7 @@ body {
     height: 50px;
     background-color: orange;
     border-radius: 50%;
-    transition: left 0.2s ease; /* Плавное движение по горизонтали */
+    transition: left 0 s ease; /* Плавное движение по горизонтали */
 }
 
 #fish {

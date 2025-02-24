@@ -1,10 +1,13 @@
 const cat = document.getElementById("cat");
 const fish = document.getElementById("fish");
 const livesDisplay = document.getElementById("lives");
+const game = document.getElementById("game");
 let lives = 3;
 let isJumping = false;
 let catSpeed = 5; // Скорость движения кота
 let targetLeft = parseInt(window.getComputedStyle(cat).left); // Целевая позиция кота
+let backgroundPosition = 0; // Позиция фона
+let isMoving = false; // Флаг, указывающий, движется ли кот
 
 // Инициализация игры
 function initGame() {
@@ -14,17 +17,26 @@ function initGame() {
     cat.style.bottom = "0";
     fish.style.right = "0"; // Возвращаем рыбу в начальную позицию
     targetLeft = 50; // Сбрасываем целевую позицию кота
+    backgroundPosition = 0; // Сбрасываем позицию фона
+    game.style.backgroundPosition = `${backgroundPosition}px 0`; // Сбрасываем фон
 }
 
 // Управление котом
 document.addEventListener("keydown", (event) => {
     if (event.code === "ArrowLeft") {
         moveCat(-10); // Движение влево
+        isMoving = true; // Кот движется
     } else if (event.code === "ArrowRight") {
         moveCat(10); // Движение вправо
-        moveFish(-10); // Движение рыбы влево, когда кот идет вправо
+        isMoving = true; // Кот движется
     } else if (event.code === "Space" && !isJumping) {
         jump(); // Прыжок
+    }
+});
+
+document.addEventListener("keyup", (event) => {
+    if (event.code === "ArrowLeft" || event.code === "ArrowRight") {
+        isMoving = false; // Кот остановился
     }
 });
 
@@ -46,13 +58,16 @@ function smoothMoveCat() {
     }
 }
 
-// Движение рыбы
-function moveFish(step) {
-    const currentRight = parseInt(window.getComputedStyle(fish).right);
-    const newRight = currentRight + step;
-    if (newRight >= 0 && newRight <= 800) {
-        fish.style.right = `${newRight}px`;
+// Движение фона и рыбы
+function moveBackgroundAndFish() {
+    if (isMoving) { // Если кот движется
+        backgroundPosition -= 2; // Двигаем фон влево
+        game.style.backgroundPosition = `${backgroundPosition}px 0`;
+
+        const currentRight = parseInt(window.getComputedStyle(fish).right);
+        fish.style.right = `${currentRight - 2}px`; // Двигаем рыбу влево
     }
+    requestAnimationFrame(moveBackgroundAndFish); // Продолжаем анимацию
 }
 
 // Прыжок кота
@@ -110,3 +125,6 @@ function loseLife() {
 
 // Инициализация игры при загрузке страницы
 initGame();
+
+// Запуск движения фона и рыбы
+moveBackgroundAndFish();
